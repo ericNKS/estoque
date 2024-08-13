@@ -7,7 +7,7 @@ import (
 )
 
 // Nome fantasia - razao social - endereco - UnidadeFederativa - uf - cnpj - inscricao estadual - email - telefone
-type fornecedor struct {
+type Fornecedor struct {
 	gorm.Model
 	NomeFantasia      string `gorm:"not null" json:"nome_fantasia"`
 	RazaoSocial       string `gorm:"not null" json:"razao_social"`
@@ -20,14 +20,14 @@ type fornecedor struct {
 	Telefone          string `json:"telefone"`
 }
 
-func NewFornecedor(nomeFantasia, razaoSocial, endereco, cep, unidadeFederativa, cnpj, inscricaoEstadual, email, telefone string) (*fornecedor, error) {
+func NewFornecedor(nomeFantasia, razaoSocial, endereco, cep, unidadeFederativa, cnpj, inscricaoEstadual, email, telefone string) (*Fornecedor, error) {
 
 	err := validateFornecedor(nomeFantasia, razaoSocial, endereco, cep, unidadeFederativa, cnpj, inscricaoEstadual)
 	if err != nil {
 		return nil, err
 	}
 
-	return &fornecedor{
+	return &Fornecedor{
 		NomeFantasia:      nomeFantasia,
 		RazaoSocial:       razaoSocial,
 		Endereco:          endereco,
