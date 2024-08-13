@@ -5,7 +5,7 @@ import (
 )
 
 func TestConnection(t *testing.T) {
-	db, err := Connection()
+	_, err := Connection()
 	if err != nil {
 		t.Fatal(err)
 	}
