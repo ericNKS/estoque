@@ -10,5 +10,4 @@ func TestConnection(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	defer db.Close()
 }
