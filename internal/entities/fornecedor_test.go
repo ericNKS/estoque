@@ -12,12 +12,12 @@ func TestNewFornecedor(t *testing.T) {
 	}
 
 	_, err = NewFornecedor("Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "", "71992037328")
-	if err == nil {
-		t.Fatal("Numero de telefone pode ser vazio")
+	if err != nil {
+		t.Fatal("O email pode ser vazio")
 	}
 
 	_, err = NewFornecedor("Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "")
-	if err == nil {
+	if err != nil {
 		t.Fatal("Numero de telefone pode ser vazio")
 	}
 
@@ -45,12 +45,12 @@ func TestNewFornecedor(t *testing.T) {
 		t.Fatal("O endereco não pode ser vazio")
 	}
 
-	_, err = NewFornecedor("", "", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "", "")
+	_, err = NewFornecedor("Gerbete Atacado", "", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "", "")
 	if err == nil {
 		t.Fatal("A razão social não pode ser vazio")
 	}
 
-	_, err = NewFornecedor("Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "", "")
+	_, err = NewFornecedor("", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "", "")
 	if err == nil {
 		t.Fatal("Nome fantasia não pode ser vazio")
 	}
