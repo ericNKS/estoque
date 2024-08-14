@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func Connection() (*gorm.DB, error) {
-	godotenv.Load("../../.env")
 	host := os.Getenv("POSTGRES_HOST")
 	dbName := os.Getenv("POSTGRES_DB_NAME")
 	user := os.Getenv("POSTGRES_USERNAME")

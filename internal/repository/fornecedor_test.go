@@ -1,22 +1,27 @@
 package repository
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/ericNKS/estoque/internal/entities"
+	"github.com/joho/godotenv"
 )
 
 func TestCreateFornecedor(t *testing.T) {
-	f, err := entities.NewFornecedor("Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "71992037328")
+	godotenv.Load("../../.env")
+	f, err := entities.NewFornecedor(3, "Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "71992037328")
 	if err != nil {
 		t.Fatal(err)
 	}
 	if err = Create(f); err != nil {
 		t.Fatal(err)
 	}
+	fmt.Println(f)
 }
 
 func TestFindAllFornecedor(t *testing.T) {
+	godotenv.Load("../../.env")
 	_, err := FindAll()
 	if err != nil {
 		t.Fatal(err)
@@ -24,7 +29,8 @@ func TestFindAllFornecedor(t *testing.T) {
 }
 
 func TestFindByIdFornecedor(t *testing.T) {
-	f, err := entities.NewFornecedor("Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "71992037328")
+	godotenv.Load("../../.env")
+	f, err := entities.NewFornecedor(3, "Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "71992037328")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -39,7 +45,8 @@ func TestFindByIdFornecedor(t *testing.T) {
 }
 
 func TestUpdateFornecedor(t *testing.T) {
-	f, err := entities.NewFornecedor("Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "71992037328")
+	godotenv.Load("../../.env")
+	f, err := entities.NewFornecedor(3, "Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "71992037328")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -54,7 +61,8 @@ func TestUpdateFornecedor(t *testing.T) {
 }
 
 func TestDeleteFornecedor(t *testing.T) {
-	f, err := entities.NewFornecedor("Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "71992037328")
+	godotenv.Load("../../.env")
+	f, err := entities.NewFornecedor(3, "Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "71992037328")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -62,7 +70,7 @@ func TestDeleteFornecedor(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err = Delete(f.ID); err != nil {
+	if err = Delete(f); err != nil {
 		t.Fatal(err)
 	}
 

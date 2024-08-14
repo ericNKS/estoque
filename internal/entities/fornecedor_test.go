@@ -1,11 +1,16 @@
 package entities
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/joho/godotenv"
+)
 
 func TestNewFornecedor(t *testing.T) {
+	godotenv.Load("../../.env")
+
 	// Nome fantasia - razao social - endereco - cep - uf - cnpj - inscricao estadual - email - telefone
 	// email e telefone podem ser vazios mas se nao forem devem ser verificados sua veracidade
-
 	_, err := NewFornecedor(3, "Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "71992037328")
 	if err != nil {
 		t.Fatal(err)
