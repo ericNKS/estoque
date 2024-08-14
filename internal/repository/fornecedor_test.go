@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"estoque/internal/entities"
 	"testing"
+
+	"github.com/ericNKS/estoque/internal/entities"
 )
 
 func TestCreateFornecedor(t *testing.T) {

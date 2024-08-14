@@ -1,4 +1,4 @@
-module estoque
+module github.com/ericNKS/estoque
 
 go 1.22.5
 

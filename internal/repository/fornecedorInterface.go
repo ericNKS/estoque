@@ -1,11 +1,13 @@
 package repository
 
-import "estoque/internal/entities"
+import (
+	"github.com/ericNKS/estoque/internal/entities/types"
+)
 
 type FornecedorInterface interface {
-	Create(f *entities.Fornecedor) error
-	FindAll() ([]*entities.Fornecedor, error)
-	FindById(id string) (entities.Fornecedor, error)
-	Update(f *entities.Fornecedor) error
-	Delete(f *entities.Fornecedor) error
+	Create(f *types.Fornecedor) error
+	FindAll() ([]*types.Fornecedor, error)
+	FindById(id string) (types.Fornecedor, error)
+	Update(f *types.Fornecedor) error
+	Delete(f *types.Fornecedor) error
 }
