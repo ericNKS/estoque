@@ -3,11 +3,9 @@ package repository
 import (
 	"github.com/ericNKS/estoque/internal/db"
 	"github.com/ericNKS/estoque/internal/entities/types"
-	"github.com/joho/godotenv"
 )
 
 func Create(f *types.Fornecedor) error {
-	godotenv.Load("../../.env")
 	db, err := db.Connection()
 	if err != nil {
 		return err

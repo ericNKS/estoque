@@ -10,8 +10,8 @@ type Fornecedor struct {
 	Endereco          string `gorm:"not null" json:"endereco"`
 	Cep               string `gorm:"not null" json:"cep"`
 	UnidadeFederativa string `gorm:"not null" json:"unidade_federativa"`
-	Cnpj              string `gorm:"not null; unique" json:"cnpj"`
-	InscricaoEstadual string `gorm:"not null; unique" json:"inscricao_estadual"`
+	Cnpj              string `gorm:"not null" json:"cnpj"`
+	InscricaoEstadual string `gorm:"not null" json:"inscricao_estadual"`
 	Email             string `json:"email"`
 	Telefone          string `json:"telefone"`
 }
