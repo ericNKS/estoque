@@ -14,7 +14,13 @@ func TestCreateFornecedor(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err = Create(f); err != nil {
+
+	fr, err := NewFornecedorRepository()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err = fr.Create(f); err != nil {
 		t.Fatal(err)
 	}
 	fmt.Println(f)
@@ -22,7 +28,11 @@ func TestCreateFornecedor(t *testing.T) {
 
 func TestFindAllFornecedor(t *testing.T) {
 	godotenv.Load("../../.env")
-	_, err := FindAll()
+	fr, err := NewFornecedorRepository()
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = fr.FindAll()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -35,7 +45,12 @@ func TestFindByIdFornecedor(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	uF, err := FindById(f.ID)
+	fr, err := NewFornecedorRepository()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	uF, err := fr.FindById(f.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,31 +65,39 @@ func TestUpdateFornecedor(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err = Create(f); err != nil {
+	fr, err := NewFornecedorRepository()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = fr.Create(f); err != nil {
 		t.Fatal(err)
 	}
 
 	f.Email = "gerbete_novo@gmail.com"
-	if err = Update(f); err != nil {
+	if err = fr.Update(f); err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestDeleteFornecedor(t *testing.T) {
 	godotenv.Load("../../.env")
+	fr, err := NewFornecedorRepository()
+	if err != nil {
+		t.Fatal(err)
+	}
 	f, err := entities.NewFornecedor(3, "Gerbete Atacado", "Gerbete", "Rua Jayme Gonçalves", "12345678", "SP", "12345678901234", "1234567890", "gerbete@gmail.com", "71992037328")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err = Create(f); err != nil {
+	if err = fr.Create(f); err != nil {
 		t.Fatal(err)
 	}
 
-	if err = Delete(f); err != nil {
+	if err = fr.Delete(f); err != nil {
 		t.Fatal(err)
 	}
 
-	nF, err := FindById(f.ID)
+	nF, err := fr.FindById(f.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
