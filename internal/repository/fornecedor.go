@@ -3,25 +3,34 @@ package repository
 import (
 	"github.com/ericNKS/estoque/internal/db"
 	"github.com/ericNKS/estoque/internal/entities/types"
-	"github.com/joho/godotenv"
+	"gorm.io/gorm"
 )
 
-func Create(f *types.Fornecedor) error {
-	godotenv.Load("../../.env")
+type FornecedorRepository struct {
+	db *gorm.DB
+}
+
+func NewFornecedorRepository() (*FornecedorRepository, error) {
 	db, err := db.Connection()
 	if err != nil {
-		return err
+		return nil, err
 	}
-	result := db.Create(f)
+
+	return &FornecedorRepository{
+		db: db,
+	}, nil
+}
+
+func (fr *FornecedorRepository) Create(f *types.Fornecedor) error {
+	result := fr.db.Create(f)
 	if result.Error != nil {
-		return err
+		return result.Error
 	}
 
 	return nil
 }
 
-func FindAll() ([]*types.Fornecedor, error) {
-	godotenv.Load("../../.env")
+func (fr *FornecedorRepository) FindAll() ([]*types.Fornecedor, error) {
 	db, err := db.Connection()
 	if err != nil {
 		return nil, err
@@ -36,12 +45,12 @@ func FindAll() ([]*types.Fornecedor, error) {
 	return fornecedores, nil
 }
 
-func FindById(id uint) (*types.Fornecedor, error) {
+func (fr *FornecedorRepository) FindById(id uint) (*types.Fornecedor, error) {
 	return nil, nil
 }
-func Update(f *types.Fornecedor) error {
+func (fr *FornecedorRepository) Update(f *types.Fornecedor) error {
 	return nil
 }
-func Delete(f *types.Fornecedor) error {
+func (fr *FornecedorRepository) Delete(f *types.Fornecedor) error {
 	return nil
 }
