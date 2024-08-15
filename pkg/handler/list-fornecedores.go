@@ -13,7 +13,7 @@ func ListFornecedor(ctx *gin.Context, repository *repository.FornecedorRepositor
 	fornecedores, err := useCase.Execute()
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
