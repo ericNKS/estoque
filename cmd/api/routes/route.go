@@ -6,24 +6,27 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func FornecedorRoute(r *gin.Engine) {
+func fRepository() *repository.FornecedorRepository {
 	fr, err := repository.NewFornecedorRepository()
 	if err != nil {
 		panic(err)
 	}
+	return fr
+}
+func FornecedorRoute(r *gin.Engine) {
 	routeApiV1 := r.Group("/api/v1")
 	fornecedorGroup := routeApiV1.Group("/fornecedor")
 
 	fornecedorGroup.POST("/", func(c *gin.Context) {
-		handler.CreateFornecedor(c, fr)
+		handler.CreateFornecedor(c, fRepository())
 	})
 
 	fornecedorGroup.GET("/", func(c *gin.Context) {
-		handler.ListFornecedor(c, fr)
+		handler.ListFornecedor(c, fRepository())
 	})
 
 	fornecedorGroup.DELETE("/:id", func(c *gin.Context) {
-		handler.DeleteFornecedor(c, fr)
+		handler.DeleteFornecedor(c, fRepository())
 	})
 
 }

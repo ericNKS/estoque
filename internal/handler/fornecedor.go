@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/ericNKS/estoque/internal/entities/types"
@@ -33,5 +34,25 @@ func CreateFornecedor(ctx *gin.Context, repository *repository.FornecedorReposit
 	}
 	ctx.JSON(http.StatusCreated, gin.H{
 		"success": true,
+	})
+}
+
+func DeleteFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
+	teste := ctx.Params
+	fmt.Println(teste)
+}
+
+func ListFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
+	useCase := fornecedor.ListFornecedor(repository)
+	fornecedores, err := useCase.Execute()
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": fornecedores,
 	})
 }
