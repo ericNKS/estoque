@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/ericNKS/estoque/pkg/routes"
+	"github.com/ericNKS/estoque/cmd/api/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )

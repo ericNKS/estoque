@@ -1,8 +1,8 @@
 package routes
 
 import (
+	"github.com/ericNKS/estoque/internal/handler"
 	"github.com/ericNKS/estoque/internal/repository"
-	"github.com/ericNKS/estoque/pkg/handler"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,7 +11,8 @@ func FornecedorRoute(r *gin.Engine) {
 	if err != nil {
 		panic(err)
 	}
-	fornecedorGroup := r.Group("/fornecedor")
+	routeApiV1 := r.Group("/api/v1")
+	fornecedorGroup := routeApiV1.Group("/fornecedor")
 
 	fornecedorGroup.POST("/", func(c *gin.Context) {
 		handler.CreateFornecedor(c, fr)
@@ -20,4 +21,9 @@ func FornecedorRoute(r *gin.Engine) {
 	fornecedorGroup.GET("/", func(c *gin.Context) {
 		handler.ListFornecedor(c, fr)
 	})
+
+	fornecedorGroup.DELETE("/:id", func(c *gin.Context) {
+		handler.DeleteFornecedor(c, fr)
+	})
+
 }

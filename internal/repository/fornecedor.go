@@ -45,6 +45,22 @@ func (fr *FornecedorRepository) FindAll() ([]*types.Fornecedor, error) {
 	return fornecedores, nil
 }
 
+func (fr *FornecedorRepository) IsUnique(cnpj string, instituicaoId uint64) (bool, error) {
+	db, err := db.Connection()
+	if err != nil {
+		return false, err
+	}
+	f := &types.Fornecedor{}
+	result := db.First(f, "cnpj = ? AND instituicao_id = ?", cnpj, instituicaoId)
+	if result.Error != nil {
+		if result.Error.Error() == "record not found" {
+			return true, nil
+		}
+		return false, result.Error
+	}
+	return false, nil
+}
+
 func (fr *FornecedorRepository) FindById(id uint) (*types.Fornecedor, error) {
 	return nil, nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ericNKS/estoque/internal/entities/types"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -20,6 +21,8 @@ func Connection() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	db.AutoMigrate(&types.Fornecedor{})
 
 	return db, nil
 }
