@@ -9,7 +9,7 @@ type listFornecedor struct {
 	repo repository.FornecedorInterface
 }
 
-func NewListFornecedor(repo repository.FornecedorInterface) *listFornecedor {
+func ListFornecedor(repo repository.FornecedorInterface) *listFornecedor {
 	return &listFornecedor{
 		repo: repo,
 	}

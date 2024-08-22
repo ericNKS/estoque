@@ -9,7 +9,7 @@ import (
 )
 
 func ListFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
-	useCase := fornecedor.NewListFornecedor(repository)
+	useCase := fornecedor.ListFornecedor(repository)
 	fornecedores, err := useCase.Execute()
 
 	if err != nil {

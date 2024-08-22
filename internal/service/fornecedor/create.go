@@ -11,7 +11,7 @@ type createFornecedor struct {
 	repo repository.FornecedorInterface
 }
 
-func NewCreateFornecedor(repo repository.FornecedorInterface) *createFornecedor {
+func CreateFornecedor(repo repository.FornecedorInterface) *createFornecedor {
 	return &createFornecedor{
 		repo: repo,
 	}

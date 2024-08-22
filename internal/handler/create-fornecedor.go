@@ -20,7 +20,7 @@ func CreateFornecedor(ctx *gin.Context, repository *repository.FornecedorReposit
 		return
 	}
 
-	useCase := fornecedor.NewCreateFornecedor(repository)
+	useCase := fornecedor.CreateFornecedor(repository)
 	err := useCase.Execute(body.InstituicaoId, body.NomeFantasia,
 		body.RazaoSocial, body.Endereco, body.Cep, body.UnidadeFederativa,
 		body.Cnpj, body.InscricaoEstadual, body.Email, body.Telefone)
