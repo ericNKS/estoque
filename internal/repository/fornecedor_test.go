@@ -50,7 +50,7 @@ func TestFindByIdFornecedor(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	uF, err := fr.FindById(f.ID)
+	uF, err := fr.FindById(uint64(f.ID))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -97,7 +97,7 @@ func TestDeleteFornecedor(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	nF, err := fr.FindById(f.ID)
+	nF, err := fr.FindById(uint64(f.ID))
 	if err != nil {
 		t.Fatal(err)
 	}
