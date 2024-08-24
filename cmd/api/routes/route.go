@@ -29,4 +29,8 @@ func FornecedorRoute(r *gin.Engine) {
 		handler.DeleteFornecedor(c, fRepository())
 	})
 
+	fornecedorGroup.PUT("/:id", func(c *gin.Context) {
+		handler.UpdateFornecedor(c, fRepository())
+	})
+
 }

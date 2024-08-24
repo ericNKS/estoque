@@ -12,5 +12,5 @@ func init() {
 func main() {
 	g := gin.Default()
 	routes.FornecedorRoute(g)
-	g.Run()
+	g.Run("127.0.0.1:8080")
 }

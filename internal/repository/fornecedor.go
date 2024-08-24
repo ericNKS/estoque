@@ -61,8 +61,18 @@ func (fr *FornecedorRepository) IsUnique(cnpj string, instituicaoId uint64) (boo
 	return false, nil
 }
 
-func (fr *FornecedorRepository) FindById(id uint) (*types.Fornecedor, error) {
-	return nil, nil
+func (fr *FornecedorRepository) FindById(id uint64) (*types.Fornecedor, error) {
+	db, err := db.Connection()
+	if err != nil {
+		return nil, err
+	}
+
+	f := &types.Fornecedor{}
+	result := db.First(f, "id = ?", id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return f, nil
 }
 func (fr *FornecedorRepository) Update(f *types.Fornecedor) error {
 	return nil
