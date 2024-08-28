@@ -1,4 +1,4 @@
-package handler
+package types
 
 type UpdateRequest struct {
 	InstituicaoId     uint64 `json:"instituicao_id" binding:"required"`

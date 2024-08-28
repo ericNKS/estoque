@@ -1,17 +1,17 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
+	"github.com/ericNKS/estoque/internal/entities/types"
 	"github.com/ericNKS/estoque/internal/repository"
 	"github.com/ericNKS/estoque/internal/service/fornecedor"
 	"github.com/gin-gonic/gin"
 )
 
 func CreateFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
-	var body CreateRequest
+	var body types.CreateRequest
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -45,8 +45,24 @@ func CreateFornecedor(ctx *gin.Context, repository *repository.FornecedorReposit
 }
 
 func DeleteFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
-	teste := ctx.Params
-	fmt.Println(teste)
+	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	useCase := fornecedor.DeleteFornecedor(repository)
+	f, err := useCase.Validate(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err = useCase.Execute(f)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusNoContent, gin.H{})
 }
 
 func ListFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
@@ -71,15 +87,20 @@ func UpdateFornecedor(ctx *gin.Context, repository *repository.FornecedorReposit
 		return
 	}
 
-	var request UpdateRequest
-	if err = ctx.ShouldBindBodyWithJSON(&request); err != nil {
+	var r types.UpdateRequest
+	if err = ctx.ShouldBindBodyWithJSON(&r); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	findCase := fornecedor.FindById(repository)
+	useCase := fornecedor.UpdateFornecedor(repository)
+	f, err := useCase.Validate(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-	f, err := findCase.Execute(id)
+	f, err = useCase.Execute(f, &r)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

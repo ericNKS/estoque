@@ -75,8 +75,20 @@ func (fr *FornecedorRepository) FindById(id uint64) (*types.Fornecedor, error) {
 	return f, nil
 }
 func (fr *FornecedorRepository) Update(f *types.Fornecedor) error {
+	db, err := db.Connection()
+	if err != nil {
+		return err
+	}
+
+	db.Save(f)
 	return nil
 }
 func (fr *FornecedorRepository) Delete(f *types.Fornecedor) error {
+	db, err := db.Connection()
+	if err != nil {
+		return err
+	}
+
+	db.Delete(f)
 	return nil
 }
