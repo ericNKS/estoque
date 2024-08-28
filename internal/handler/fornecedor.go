@@ -10,6 +10,44 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func ListFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
+	useCase := fornecedor.ListFornecedor(repository)
+	fornecedores, err := useCase.Execute()
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": fornecedores,
+	})
+}
+
+func FindFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
+	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	useCase := fornecedor.FindFornecedor(repository)
+	f, err := useCase.Execute(id)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": f,
+	})
+}
+
 func CreateFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
 	var body types.CreateRequest
 	if err := ctx.ShouldBindJSON(&body); err != nil {
@@ -63,21 +101,6 @@ func DeleteFornecedor(ctx *gin.Context, repository *repository.FornecedorReposit
 		return
 	}
 	ctx.JSON(http.StatusNoContent, gin.H{})
-}
-
-func ListFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
-	useCase := fornecedor.ListFornecedor(repository)
-	fornecedores, err := useCase.Execute()
-
-	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": fornecedores,
-	})
 }
 
 func UpdateFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {

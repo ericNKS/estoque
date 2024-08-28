@@ -9,7 +9,7 @@ type findByIdFornecedor struct {
 	repo repository.FornecedorInterface
 }
 
-func FindById(repo repository.FornecedorInterface) *findByIdFornecedor {
+func FindFornecedor(repo repository.FornecedorInterface) *findByIdFornecedor {
 	return &findByIdFornecedor{
 		repo: repo,
 	}
