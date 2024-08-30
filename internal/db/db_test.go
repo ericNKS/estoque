@@ -1,6 +1,7 @@
 package db
 
 import (
+	"context"
 	"testing"
 
 	"github.com/joho/godotenv"
@@ -17,10 +18,10 @@ func TestConnection(t *testing.T) {
 
 func TestRedisConnection(t *testing.T) {
 	godotenv.Load("../../.env")
-	rdb, ctx := RedisConnection()
-	defer rdb.Close()
+	rdb := RedisConnection()
+	defer rdb.Db.Close()
 
-	_, err := rdb.Ping(ctx).Result()
+	_, err := rdb.Db.Ping(context.Background()).Result()
 	if err != nil {
 		t.Fatal(err)
 	}

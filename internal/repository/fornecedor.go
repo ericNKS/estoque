@@ -1,23 +1,29 @@
 package repository
 
 import (
+	"strconv"
+	"time"
+
 	"github.com/ericNKS/estoque/internal/db"
 	"github.com/ericNKS/estoque/internal/entities/types"
 	"gorm.io/gorm"
 )
 
 type FornecedorRepository struct {
-	db *gorm.DB
+	db  *gorm.DB
+	rdb *db.DbRedis
 }
 
 func NewFornecedorRepository() (*FornecedorRepository, error) {
-	db, err := db.Connection()
+	pstg, err := db.Connection()
 	if err != nil {
 		return nil, err
 	}
+	rdb := db.RedisConnection()
 
 	return &FornecedorRepository{
-		db: db,
+		db:  pstg,
+		rdb: rdb,
 	}, nil
 }
 
@@ -26,7 +32,10 @@ func (fr *FornecedorRepository) Create(f *types.Fornecedor) error {
 	if result.Error != nil {
 		return result.Error
 	}
-
+	err := fr.rdb.Set(strconv.FormatUint(uint64(f.ID), 10), f, 20*time.Hour)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -62,18 +71,23 @@ func (fr *FornecedorRepository) IsUnique(cnpj string, instituicaoId uint64) (boo
 }
 
 func (fr *FornecedorRepository) FindById(id uint64) (*types.Fornecedor, error) {
-	db, err := db.Connection()
-	if err != nil {
-		return nil, err
+	defer fr.rdb.Db.Close()
+	var f types.Fornecedor
+	err := fr.rdb.Get(strconv.FormatUint(id, 10), &f)
+	if err == nil {
+		return &f, nil
 	}
 
-	f := &types.Fornecedor{}
-	result := db.First(f, "id = ?", id)
+	result := fr.db.First(&f, "id = ?", id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	return f, nil
+
+	fr.rdb.Set(strconv.FormatUint(uint64(f.ID), 10), &f, 20*time.Hour)
+
+	return &f, nil
 }
+
 func (fr *FornecedorRepository) Update(f *types.Fornecedor) error {
 	db, err := db.Connection()
 	if err != nil {
@@ -83,6 +97,7 @@ func (fr *FornecedorRepository) Update(f *types.Fornecedor) error {
 	db.Save(f)
 	return nil
 }
+
 func (fr *FornecedorRepository) Delete(f *types.Fornecedor) error {
 	db, err := db.Connection()
 	if err != nil {

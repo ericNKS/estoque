@@ -37,4 +37,7 @@ func FornecedorRoute(r *gin.Engine) {
 		handler.UpdateFornecedor(c, fRepository())
 	})
 
+	r.GET("/teste", func(c *gin.Context) {
+		handler.GetRedis(c, fRepository())
+	})
 }
