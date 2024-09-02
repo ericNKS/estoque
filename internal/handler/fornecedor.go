@@ -1,11 +1,9 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
-	"github.com/ericNKS/estoque/internal/db"
 	"github.com/ericNKS/estoque/internal/entities/types"
 	"github.com/ericNKS/estoque/internal/repository"
 	"github.com/ericNKS/estoque/internal/service/fornecedor"
@@ -132,20 +130,4 @@ func UpdateFornecedor(ctx *gin.Context, repository *repository.FornecedorReposit
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"success": f})
-}
-
-func GetRedis(ctx *gin.Context, repository *repository.FornecedorRepository) {
-	rdb := db.RedisConnection()
-	defer rdb.Db.Close()
-	var fornecedor types.Fornecedor
-
-	err := rdb.Get("11", &fornecedor)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		fmt.Println("Error: no get data from redis")
-		return
-	}
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": fornecedor,
-	})
 }
