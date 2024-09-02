@@ -13,8 +13,7 @@ import (
 )
 
 type DbRedis struct {
-	Db  *redis.Client
-	Ctx context.Context
+	Db *redis.Client
 }
 
 func RedisConnection() *DbRedis {
@@ -53,6 +52,16 @@ func (r *DbRedis) Set(key string, tipo any, expiration time.Duration) error {
 	}
 
 	r.Db.Set(context.Background(), key, b, expiration)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *DbRedis) Del(key string) error {
+
+	_, err := r.Db.Del(context.Background(), key).Result()
 	if err != nil {
 		return err
 	}

@@ -139,7 +139,7 @@ func GetRedis(ctx *gin.Context, repository *repository.FornecedorRepository) {
 	defer rdb.Db.Close()
 	var fornecedor types.Fornecedor
 
-	err := rdb.Get("9", &fornecedor)
+	err := rdb.Get("11", &fornecedor)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		fmt.Println("Error: no get data from redis")

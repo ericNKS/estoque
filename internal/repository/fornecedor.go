@@ -1,12 +1,14 @@
 package repository
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 
 	"github.com/ericNKS/estoque/internal/db"
 	"github.com/ericNKS/estoque/internal/entities/types"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type FornecedorRepository struct {
@@ -28,39 +30,37 @@ func NewFornecedorRepository() (*FornecedorRepository, error) {
 }
 
 func (fr *FornecedorRepository) Create(f *types.Fornecedor) error {
+	defer fr.rdb.Db.Close()
 	result := fr.db.Create(f)
 	if result.Error != nil {
 		return result.Error
 	}
-	err := fr.rdb.Set(strconv.FormatUint(uint64(f.ID), 10), f, 20*time.Hour)
-	if err != nil {
-		return err
-	}
+	go fr.rdb.Set(strconv.FormatUint(uint64(f.ID), 10), f, 20*time.Hour)
+
 	return nil
 }
 
 func (fr *FornecedorRepository) FindAll() ([]*types.Fornecedor, error) {
-	db, err := db.Connection()
-	if err != nil {
-		return nil, err
-	}
-
 	var fornecedores []*types.Fornecedor
-	result := db.Find(&fornecedores)
+	result := fr.db.
+		Limit(10).
+		Order(clause.OrderByColumn{
+			Column: clause.Column{
+				Name: "nome_fantasia",
+			}, Desc: false,
+		}).
+		Find(&fornecedores)
+
 	if result.Error != nil {
-		return nil, err
+		return nil, result.Error
 	}
 
 	return fornecedores, nil
 }
 
 func (fr *FornecedorRepository) IsUnique(cnpj string, instituicaoId uint64) (bool, error) {
-	db, err := db.Connection()
-	if err != nil {
-		return false, err
-	}
 	f := &types.Fornecedor{}
-	result := db.First(f, "cnpj = ? AND instituicao_id = ?", cnpj, instituicaoId)
+	result := fr.db.First(f, "cnpj = ? AND instituicao_id = ?", cnpj, instituicaoId)
 	if result.Error != nil {
 		if result.Error.Error() == "record not found" {
 			return true, nil
@@ -71,10 +71,10 @@ func (fr *FornecedorRepository) IsUnique(cnpj string, instituicaoId uint64) (boo
 }
 
 func (fr *FornecedorRepository) FindById(id uint64) (*types.Fornecedor, error) {
-	defer fr.rdb.Db.Close()
 	var f types.Fornecedor
 	err := fr.rdb.Get(strconv.FormatUint(id, 10), &f)
 	if err == nil {
+		fmt.Println("Redis")
 		return &f, nil
 	}
 
@@ -84,26 +84,30 @@ func (fr *FornecedorRepository) FindById(id uint64) (*types.Fornecedor, error) {
 	}
 
 	fr.rdb.Set(strconv.FormatUint(uint64(f.ID), 10), &f, 20*time.Hour)
+	defer fr.rdb.Db.Close()
 
 	return &f, nil
 }
 
 func (fr *FornecedorRepository) Update(f *types.Fornecedor) error {
-	db, err := db.Connection()
-	if err != nil {
-		return err
-	}
+	defer fr.rdb.Db.Close()
+	fr.db.Save(f)
+	go fr.rdb.Set(strconv.FormatUint(uint64(f.ID), 10), &f, 20*time.Hour)
 
-	db.Save(f)
 	return nil
 }
 
 func (fr *FornecedorRepository) Delete(f *types.Fornecedor) error {
-	db, err := db.Connection()
+	defer fr.rdb.Db.Close()
+	err := fr.rdb.Del(strconv.FormatUint(uint64(f.ID), 10))
 	if err != nil {
 		return err
 	}
 
-	db.Delete(f)
+	result := fr.db.Delete(f)
+	if result.Error != nil {
+		return result.Error
+	}
+
 	return nil
 }
