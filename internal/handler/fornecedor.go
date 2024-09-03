@@ -23,6 +23,10 @@ func ListFornecedor(ctx *gin.Context, repository *repository.FornecedorRepositor
 	ctx.JSON(http.StatusOK, gin.H{
 		"success": fornecedores,
 	})
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": true,
+	})
 }
 
 func FindFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
@@ -70,13 +74,13 @@ func CreateFornecedor(ctx *gin.Context, repository *repository.FornecedorReposit
 		body.Email,
 		body.Telefone,
 	)
-
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
+
 	ctx.JSON(http.StatusCreated, gin.H{
 		"success": true,
 	})

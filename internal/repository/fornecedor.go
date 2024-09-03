@@ -30,12 +30,12 @@ func NewFornecedorRepository() (*FornecedorRepository, error) {
 }
 
 func (fr *FornecedorRepository) Create(f *types.Fornecedor) error {
-	defer fr.rdb.Db.Close()
 	result := fr.db.Create(f)
 	if result.Error != nil {
 		return result.Error
 	}
 	go fr.rdb.Set(strconv.FormatUint(uint64(f.ID), 10), f, 20*time.Hour)
+	defer fr.rdb.Db.Close()
 
 	return nil
 }
@@ -58,16 +58,16 @@ func (fr *FornecedorRepository) FindAll() ([]*types.Fornecedor, error) {
 	return fornecedores, nil
 }
 
-func (fr *FornecedorRepository) IsUnique(cnpj string, instituicaoId uint64) (bool, error) {
+func (fr *FornecedorRepository) IsUnique(cnpj string, instituicaoId uint64) error {
 	f := &types.Fornecedor{}
 	result := fr.db.First(f, "cnpj = ? AND instituicao_id = ?", cnpj, instituicaoId)
 	if result.Error != nil {
 		if result.Error.Error() == "record not found" {
-			return true, nil
+			return nil
 		}
-		return false, result.Error
+		return result.Error
 	}
-	return false, nil
+	return nil
 }
 
 func (fr *FornecedorRepository) FindById(id uint64) (*types.Fornecedor, error) {
@@ -90,9 +90,9 @@ func (fr *FornecedorRepository) FindById(id uint64) (*types.Fornecedor, error) {
 }
 
 func (fr *FornecedorRepository) Update(f *types.Fornecedor) error {
-	defer fr.rdb.Db.Close()
 	fr.db.Save(f)
 	go fr.rdb.Set(strconv.FormatUint(uint64(f.ID), 10), &f, 20*time.Hour)
+	defer fr.rdb.Db.Close()
 
 	return nil
 }
