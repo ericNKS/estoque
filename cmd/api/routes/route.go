@@ -1,10 +1,15 @@
 package routes
 
 import (
+	"net/http"
+
+	"github.com/ericNKS/estoque/internal/entities"
 	"github.com/ericNKS/estoque/internal/handler"
 	"github.com/ericNKS/estoque/internal/repository"
 	"github.com/gin-gonic/gin"
 )
+
+var v1 = "/api/v1"
 
 func fRepository() *repository.FornecedorRepository {
 	fr, err := repository.NewFornecedorRepository()
@@ -13,9 +18,8 @@ func fRepository() *repository.FornecedorRepository {
 	}
 	return fr
 }
-func FornecedorRoute(r *gin.Engine) {
-	routeApiV1 := r.Group("/api/v1")
-	fornecedorGroup := routeApiV1.Group("/fornecedor")
+func FornecedorRouteV1(r *gin.Engine) {
+	fornecedorGroup := r.Group(v1 + "/fornecedor")
 
 	fornecedorGroup.POST("/", func(c *gin.Context) {
 		handler.CreateFornecedor(c, fRepository())
@@ -35,5 +39,32 @@ func FornecedorRoute(r *gin.Engine) {
 
 	fornecedorGroup.PUT("/:id", func(c *gin.Context) {
 		handler.UpdateFornecedor(c, fRepository())
+	})
+}
+
+func ProdutoRouteV1(r *gin.Engine) {
+	produtoGroup := r.Group(v1 + "/produto")
+
+	produtoGroup.GET("/", func(c *gin.Context) {
+		fornecedorId := uint64(12)
+		nomeProduto := "Tenis de corrida"
+		preco := float32(299.90)
+		qtd := uint16(10)
+		p, err := entities.NewProduto(
+			fornecedorId,
+			nomeProduto,
+			preco,
+			qtd,
+		)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"produto": p,
+		})
+
 	})
 }
