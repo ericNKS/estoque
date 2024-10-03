@@ -53,7 +53,7 @@ func FindFornecedor(ctx *gin.Context, repository *repository.FornecedorRepositor
 }
 
 func CreateFornecedor(ctx *gin.Context, repository *repository.FornecedorRepository) {
-	var body types.CreateRequest
+	var body types.CreateFornecedorRequest
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -114,7 +114,7 @@ func UpdateFornecedor(ctx *gin.Context, repository *repository.FornecedorReposit
 		return
 	}
 
-	var r types.UpdateRequest
+	var r types.UpdateFornecedorRequest
 	if err = ctx.ShouldBindBodyWithJSON(&r); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

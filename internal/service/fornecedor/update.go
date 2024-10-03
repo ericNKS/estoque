@@ -23,7 +23,7 @@ func (u *updateFornecedor) Validate(id uint64) (*types.Fornecedor, error) {
 	return f, nil
 }
 
-func (u *updateFornecedor) Execute(f *types.Fornecedor, ur *types.UpdateRequest) (*types.Fornecedor, error) {
+func (u *updateFornecedor) Execute(f *types.Fornecedor, ur *types.UpdateFornecedorRequest) (*types.Fornecedor, error) {
 
 	if ur.Cep != "" {
 		f.Cep = ur.Cep

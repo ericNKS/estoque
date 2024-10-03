@@ -1,6 +1,6 @@
 package types
 
-type UpdateRequest struct {
+type UpdateFornecedorRequest struct {
 	InstituicaoId     uint64 `json:"instituicao_id" binding:"required"`
 	NomeFantasia      string `json:"nome_fantasia"`
 	RazaoSocial       string `json:"razao_social"`
@@ -12,7 +12,7 @@ type UpdateRequest struct {
 	Email             string `json:"email"`
 	Telefone          string `json:"telefone"`
 }
-type CreateRequest struct {
+type CreateFornecedorRequest struct {
 	InstituicaoId     uint64 `json:"instituicao_id" binding:"required"`
 	NomeFantasia      string `json:"nome_fantasia" binding:"required"`
 	RazaoSocial       string `json:"razao_social" binding:"required"`

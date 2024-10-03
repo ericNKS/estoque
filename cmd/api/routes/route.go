@@ -45,15 +45,19 @@ func FornecedorRouteV1(r *gin.Engine) {
 func ProdutoRouteV1(r *gin.Engine) {
 	produtoGroup := r.Group(v1 + "/produto")
 
-	produtoGroup.GET("/", func(c *gin.Context) {
+	produtoGroup.POST("/", func(c *gin.Context) {
 		fornecedorId := uint64(12)
+		instituicaoId := uint64(1)
 		nomeProduto := "Tenis de corrida"
-		preco := float32(299.90)
+		precoCompra := float32(100)
+		precoVenda := float32(299.90)
 		qtd := uint16(10)
 		p, err := entities.NewProduto(
 			fornecedorId,
+			instituicaoId,
 			nomeProduto,
-			preco,
+			precoCompra,
+			precoVenda,
 			qtd,
 		)
 		if err != nil {
